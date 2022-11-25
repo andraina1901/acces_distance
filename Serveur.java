@@ -1,14 +1,13 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-/*
- * www.codeurjava.com
- */
 public class Serveur {
 
     public static void main(String[] test) {
@@ -26,6 +25,7 @@ public class Serveur {
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             Thread envoi = new Thread(new Runnable() {
                 String msg;
+                String proc = "";
 
                 @Override
                 public void run() {
@@ -43,21 +43,26 @@ public class Serveur {
 
                 @Override
                 public void run() {
-                    try {
-                        msg = in.readLine();
-                        // tant que le client est connecté
-                        while (msg != null) {
-                            System.out.println(msg);
+                    while (true) {
+
+                        try {
                             msg = in.readLine();
+                            ProcessBuilder pc = new ProcessBuilder("cmd.exe", "/c", msg);
+
+                            pc.directory(new File("L:\\"));
+                            Process p = pc.start();
+                            InputStream is = p.getInputStream();
+                            InputStreamReader isr = new InputStreamReader(is);
+                            BufferedReader br = new BufferedReader(isr);
+
+                            while (br.readLine() != null) {
+                                System.out.println(br.readLine());
+                                // msg = in.readLine();
+                            }
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                        // sortir de la boucle si le client a déconecté
-                        System.out.println("Client déconecté");
-                        // fermer le flux et la session socket
-                        out.close();
-                        clientSocket.close();
-                        serveurSocket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
                 }
             });
