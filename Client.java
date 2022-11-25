@@ -39,6 +39,7 @@ public class Client {
                 }
             });
             envoyer.start();
+            System.out.println("test");
             Thread recevoir = new Thread(new Runnable() {
                 String msg;
 
