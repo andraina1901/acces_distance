@@ -10,7 +10,7 @@ public class MainClient {
         String hostAdress = InetAddress.getLocalHost().getHostAddress();
         Client c = new Client(hostAdress);
         Socket client = c.getSocket();
-        
-        
+        ClientScreen cs = new ClientScreen(client);
+        cs.screen();
     }
 }
