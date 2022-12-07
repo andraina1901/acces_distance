@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.awt.Canvas;
 
-class SendEvents implements MouseMotionListener, MouseListener {
+class SendEvents implements MouseMotionListener, MouseListener, KeyListener {
 
    Socket sSocket = null;
    Canvas sCanvas = null;
@@ -21,6 +21,7 @@ class SendEvents implements MouseMotionListener, MouseListener {
 
     sCanvas.addMouseMotionListener(this);
     sCanvas.addMouseListener(this);
+    sCanvas.addKeyListener(this);
 
     try {
       writer = new PrintWriter(sSocket.getOutputStream());
@@ -32,7 +33,7 @@ class SendEvents implements MouseMotionListener, MouseListener {
   public void mouseDragged(MouseEvent e) {}
 
   public void mouseMoved(MouseEvent e) {
-    writer.println(5);
+    writer.println(0);
     writer.println((int) (e.getX()));
     writer.println((int) (e.getY()));
     writer.flush();
@@ -44,9 +45,9 @@ class SendEvents implements MouseMotionListener, MouseListener {
   public void mousePressed(MouseEvent e) {
     writer.println(1);
     int button = e.getButton();
-    int xButton = 16;
+    int xButton = 1024;
     if (button == 3) {
-      xButton = 4;
+      xButton = 4096;
     }
     writer.println(xButton);
     writer.flush();
@@ -55,9 +56,9 @@ class SendEvents implements MouseMotionListener, MouseListener {
   public void mouseReleased(MouseEvent e) {
     writer.println(2);
     int button = e.getButton();
-    int xButton = 16;
+    int xButton = 1024;
     if (button == 3) {
-      xButton = 4;
+      xButton = 4096;
     }
     writer.println(xButton);
     writer.flush();
@@ -66,6 +67,22 @@ class SendEvents implements MouseMotionListener, MouseListener {
   public void mouseEntered(MouseEvent e) {}
 
   public void mouseExited(MouseEvent e) {}
+
+  public void keyTyped(KeyEvent e) {
+    
+  }
+
+  public void keyPressed(KeyEvent e) {
+    writer.println(3);
+    writer.println(e.getKeyCode());
+    writer.flush();
+  }
+
+  public void keyReleased(KeyEvent e) {
+    writer.println(4);
+    writer.println(e.getKeyCode());
+    writer.flush();
+  }
 
 }
 

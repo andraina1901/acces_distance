@@ -25,14 +25,19 @@ class ReceiveEvents extends Thread {
 
       while (true) {
         int command = scanner.nextInt();
-        if(command==5) {
+
+        if(command==0) {
             robot.mouseMove(scanner.nextInt(), scanner.nextInt());
         }if(command == 1){
           robot.mousePress(scanner.nextInt());
-        }
-        if(command == 2){
+        }if(command == 2){
             robot.mouseRelease(scanner.nextInt());
+        } if (command==3) {
+          robot.keyPress(scanner.nextInt());
+        } if (command==4) {
+          robot.keyRelease(scanner.nextInt());
         }
+        
         System.out.println(command);
       }
     } catch (IOException ex) {
