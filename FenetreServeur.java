@@ -1,8 +1,6 @@
 package serveur;
 import java.awt.Dimension;
-
 import javax.swing.JFrame;
-
 import serveur.PanelServeur;
 
 public class FenetreServeur extends JFrame{

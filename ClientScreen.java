@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
 
@@ -16,9 +17,6 @@ public class ClientScreen{
 
     public ClientScreen(Socket socket) throws Exception{
         this.s = socket;
-        // this.robot = robot;
-        // this.rect = rect;
-        // start();
     }
 
     public void screen() {
@@ -32,15 +30,18 @@ public class ClientScreen{
             this.setRobot(r);
             
             DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-        
+            ByteArrayOutputStream tabByte;
             while (true) {
                bi = r.createScreenCapture(rec);
-               ByteArrayOutputStream tabByte = new ByteArrayOutputStream();
-               ImageIO.write(bi, "jpeg", tabByte);
+               tabByte = new ByteArrayOutputStream();
+               ImageIO.write(bi, "png", tabByte);
 
-               byte[] tb = tabByte.toByteArray();
+               byte[] tb = ByteBuffer.allocate(4).putInt(tabByte.size()).array();
+
                dos.write(tb);
-               Thread.sleep(1);
+               dos.write(tabByte.toByteArray());
+               dos.flush();
+               new ReceiveEvents(s, r);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -12,8 +12,10 @@ public class MainServeur {
         Serveur s = new Serveur();
         // ServerSocket ss = s.getSocket();
         ShowScreen sc = new ShowScreen(s);
+        while (true) {
+            sc.run();
+        }
         
         
-        // ss.close();
     }
 }
