@@ -42,7 +42,8 @@ public class ShowScreen implements Runnable{
             ss = ser.getSocket();
             Socket client = ss.accept();
             fen = new FenetreServeur();
-            fen.setPs(new PanelServeur());
+            fen.setCs(new Canvas());
+            new SendEvents(client, fen.getCs());
             InputStream in = client.getInputStream();
             DataInputStream ois =new DataInputStream(in);
             BufferedImage image = null;
@@ -101,58 +102,14 @@ public class ShowScreen implements Runnable{
     
             image = ImageIO.read(new ByteArrayInputStream(img));
             image.getScaledInstance(image.getWidth(null), image.getHeight(null), image.SCALE_FAST);
-            fen.getPs().setSize(image.getWidth(null), image.getHeight(null));
-            fen.getPs().setImage(image);
-            fen.getPs().repaint();
-            // new SendEvents(client, fen.getPs());
+            fen.getCs().setSize(image.getWidth(null), image.getHeight(null));
+            fen.setImage(image);
+            fen.update();
         } catch (Exception e) {
-            //TODO: handle exception
+            e.printStackTrace();
         }
     }
-    ///////////// end of the game loop
-
-    // atsofoka amin ny boucle infini
-    // (
-        // try {
-        //     byte[] bytes = new byte[4];
-        //     ois.readFully(bytes);
     
-        //     int size = ByteBuffer.wrap(bytes).asIntBuffer().get();
-        //     byte[] img = new byte[size];
-        //     int totalRead = 0;
-        //     int currentRead;
-        //     while (totalRead<size && (currentRead = ois.read(img, totalRead, size-totalRead))>0) {
-        //         totalRead += currentRead;
-        //     }
-    
-        //     image = ImageIO.read(new ByteArrayInputStream(img));
-        //     image.getScaledInstance(image.getWidth(null), image.getHeight(null), image.SCALE_FAST);
-        //     fen.getPs().setSize(image.getWidth(null), image.getHeight(null));
-        //     fen.getPs().setImage(image);
-        //     fen.getPs().repaint();
-        //     new SendEvents(client, fen.getPs());
-        // } catch (Exception e) {
-        //     //TODO: handle exception
-        // }
-
-    // )
-    // public void run(){
-    //     try {
-    //         ss = ser.getSocket();
-    //         Socket client = ss.accept();
-    //         fen = new FenetreServeur();
-    //         fen.setPs(new PanelServeur());
-    //         InputStream in = client.getInputStream();
-    //         DataInputStream ois =new DataInputStream(in);
-    //         BufferedImage image;
-    //         while (true) {
-            
-    //         }
-    //     } catch (Exception e) {
-    //        e.printStackTrace();
-    //     }
-        
-    // }
 
     public FenetreServeur getFen() {
         return fen;

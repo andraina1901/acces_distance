@@ -22,11 +22,18 @@ class ReceiveEvents extends Thread {
     Scanner scanner = null;
     try {
       scanner = new Scanner(socket.getInputStream());
+
       while (true) {
         int command = scanner.nextInt();
         if(command==5) {
             robot.mouseMove(scanner.nextInt(), scanner.nextInt());
+        }if(command == 1){
+          robot.mousePress(scanner.nextInt());
         }
+        if(command == 2){
+            robot.mouseRelease(scanner.nextInt());
+        }
+        System.out.println(command);
       }
     } catch (IOException ex) {
       ex.printStackTrace();

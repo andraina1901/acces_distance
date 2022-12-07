@@ -7,19 +7,20 @@ import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import javax.swing.JPanel;
+import java.awt.Canvas;
 
-class SendEvents implements MouseMotionListener {
+class SendEvents implements MouseMotionListener, MouseListener {
 
-  private Socket sSocket = null;
-  private JPanel sJPanel = null;
-  private PrintWriter writer = null;
+   Socket sSocket = null;
+   Canvas sCanvas = null;
+   PrintWriter writer = null;
 
-  SendEvents(Socket s, JPanel p) {
+  SendEvents(Socket s, Canvas p) {
     sSocket = s;
-    sJPanel = p;
+    sCanvas = p;
 
-    sJPanel.addMouseMotionListener(this);
+    sCanvas.addMouseMotionListener(this);
+    sCanvas.addMouseListener(this);
 
     try {
       writer = new PrintWriter(sSocket.getOutputStream());
@@ -36,6 +37,35 @@ class SendEvents implements MouseMotionListener {
     writer.println((int) (e.getY()));
     writer.flush();
   }
+
+  public void mouseClicked(MouseEvent e) {
+  }
+
+  public void mousePressed(MouseEvent e) {
+    writer.println(1);
+    int button = e.getButton();
+    int xButton = 16;
+    if (button == 3) {
+      xButton = 4;
+    }
+    writer.println(xButton);
+    writer.flush();
+  }
+
+  public void mouseReleased(MouseEvent e) {
+    writer.println(2);
+    int button = e.getButton();
+    int xButton = 16;
+    if (button == 3) {
+      xButton = 4;
+    }
+    writer.println(xButton);
+    writer.flush();
+  }
+
+  public void mouseEntered(MouseEvent e) {}
+
+  public void mouseExited(MouseEvent e) {}
 
 }
 
