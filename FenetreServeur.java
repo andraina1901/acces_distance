@@ -14,6 +14,7 @@ public class FenetreServeur extends JFrame{
     public FenetreServeur(){
         Dimension d = getToolkit().getScreenSize();
         setSize(d);
+        // setLocation();
         setTitle("Client screen");
         setResizable(false);
         setVisible(true);
@@ -23,8 +24,8 @@ public class FenetreServeur extends JFrame{
 
     public void update(){
         Graphics2D g2d = (Graphics2D) g;
-        // g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        // g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g2d.drawImage(image, 0, 0, this);
         bs.show();
     }

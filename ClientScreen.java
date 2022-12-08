@@ -21,10 +21,11 @@ public class ClientScreen{
 
     public void screen() {
         try {
-            GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            GraphicsDevice gd = g.getDefaultScreenDevice();
-            Rectangle rec = g.getMaximumWindowBounds();
-            Robot r = new Robot(gd);
+            // GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            // GraphicsDevice gd = g.getDefaultScreenDevice();
+            Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+            Rectangle rec = new Rectangle(d);
+            Robot r = new Robot();
             BufferedImage bi;
             this.setRect(rec);
             this.setRobot(r);
