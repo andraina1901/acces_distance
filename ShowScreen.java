@@ -102,7 +102,7 @@ public class ShowScreen implements Runnable{
     
             image = ImageIO.read(new ByteArrayInputStream(img));
             image.getScaledInstance(image.getWidth(null), image.getHeight(null), image.SCALE_FAST);
-            fen.setSize(image.getWidth()+25, image.getHeight()+50);
+            fen.getCs().setSize(image.getWidth(null), image.getHeight(null));
             fen.setImage(image);
             fen.update();
             
@@ -110,7 +110,6 @@ public class ShowScreen implements Runnable{
             e.printStackTrace();
         }
     }
-    
 
     public FenetreServeur getFen() {
         return fen;
