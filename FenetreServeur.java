@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
-import serveur.PanelServeur;
 
 public class FenetreServeur extends JFrame{
     Canvas cs;

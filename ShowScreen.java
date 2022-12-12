@@ -12,7 +12,6 @@ import java.awt.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import serveur.FenetreServeur;
-import serveur.PanelServeur;
 import serveur.Serveur;
 
 public class ShowScreen implements Runnable{
