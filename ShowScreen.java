@@ -14,15 +14,15 @@ import java.awt.image.BufferedImage;
 import serveur.FenetreServeur;
 import serveur.Serveur;
 
-public class ShowScreen implements Runnable{
-    FenetreServeur fen ;
-    ServerSocket ss ;
-    Serveur ser;
+public class ShowScreen extends Thread {
+    FenetreServeur fen;
+    ServerSocket ss;
+    Socket client;
     boolean running = true;
-    int tickCount=0;
+    int tickCount = 0;
 
-    public ShowScreen(Serveur ser) throws Exception{
-        this.ser = ser;
+    public ShowScreen(Socket client) throws Exception {
+        this.client = client;
     }
 
     //// GAME LOOP
@@ -38,46 +38,44 @@ public class ShowScreen implements Runnable{
         double delta = 0;
 
         try {
-            ss = ser.getSocket();
-            Socket client = ss.accept();
             fen = new FenetreServeur();
             fen.setCs(new Canvas());
             new SendEvents(client, fen.getCs());
             InputStream in = client.getInputStream();
-            DataInputStream ois =new DataInputStream(in);
+            DataInputStream ois = new DataInputStream(in);
             BufferedImage image = null;
-        
-        while (running) {
-            long now = System.nanoTime();
-            delta += (now - lastTime) / nsPerTick;
-            lastTime = now;
-            boolean shouldRender = true;
 
-            while (delta >= 1) {
-                ticks++;
-                tick();
-                delta -= 1;
-                shouldRender = true;
-            }
+            while (running) {
+                long now = System.nanoTime();
+                delta += (now - lastTime) / nsPerTick;
+                lastTime = now;
+                boolean shouldRender = true;
 
-            try {
-                Thread.sleep(2);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
+                while (delta >= 1) {
+                    ticks++;
+                    tick();
+                    delta -= 1;
+                    shouldRender = true;
+                }
 
-            if (shouldRender) {
-                frames++;
-                render(ois, image, client);
-            }
+                try {
+                    Thread.sleep(2);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
 
-            if (System.currentTimeMillis() - lastTimer >= 1000) {
-                lastTimer += 1000;
-                // System.out.println(ticks + " ticks, " + frames + " frames");
-                frames = 0;
-                ticks = 0;
+                if (shouldRender) {
+                    frames++;
+                    render(ois, image, client);
+                }
+
+                if (System.currentTimeMillis() - lastTimer >= 1000) {
+                    lastTimer += 1000;
+                    frames = 0;
+                    ticks = 0;
+                }
             }
-        } } catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -90,21 +88,21 @@ public class ShowScreen implements Runnable{
         try {
             byte[] bytes = new byte[4];
             ois.readFully(bytes);
-    
+
             int size = ByteBuffer.wrap(bytes).asIntBuffer().get();
             byte[] img = new byte[size];
             int totalRead = 0;
             int currentRead;
-            while (totalRead<size && (currentRead = ois.read(img, totalRead, size-totalRead))>0) {
+            while (totalRead < size && (currentRead = ois.read(img, totalRead, size - totalRead)) > 0) {
                 totalRead += currentRead;
             }
-    
+
             image = ImageIO.read(new ByteArrayInputStream(img));
             image.getScaledInstance(image.getWidth(null), image.getHeight(null), image.SCALE_FAST);
             fen.getCs().setSize(image.getWidth(null), image.getHeight(null));
             fen.setImage(image);
             fen.update();
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -126,11 +124,4 @@ public class ShowScreen implements Runnable{
         this.ss = ss;
     }
 
-    public Serveur getSer() {
-        return ser;
-    }
-
-    public void setSer(Serveur ser) {
-        this.ser = ser;
-    }
 }
