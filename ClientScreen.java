@@ -10,39 +10,37 @@ import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
 
-public class ClientScreen{
+public class ClientScreen {
     Socket s;
     Robot robot;
     Rectangle rect;
 
-    public ClientScreen(Socket socket) throws Exception{
+    public ClientScreen(Socket socket) throws Exception {
         this.s = socket;
     }
 
     public void screen() {
         try {
-            // GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            // GraphicsDevice gd = g.getDefaultScreenDevice();
             Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
             Rectangle rec = new Rectangle(d);
             Robot r = new Robot();
             BufferedImage bi;
             this.setRect(rec);
             this.setRobot(r);
-            
+
             DataOutputStream dos = new DataOutputStream(s.getOutputStream());
             ByteArrayOutputStream tabByte;
             while (true) {
-               bi = r.createScreenCapture(rec);
-               tabByte = new ByteArrayOutputStream();
-               ImageIO.write(bi, "png", tabByte);
+                bi = r.createScreenCapture(rec);
+                tabByte = new ByteArrayOutputStream();
+                ImageIO.write(bi, "png", tabByte);
 
-               byte[] tb = ByteBuffer.allocate(4).putInt(tabByte.size()).array();
+                byte[] tb = ByteBuffer.allocate(4).putInt(tabByte.size()).array();
 
-               dos.write(tb);
-               dos.write(tabByte.toByteArray());
-               dos.flush();
-               new ReceiveEvents(s, r);
+                dos.write(tb);
+                dos.write(tabByte.toByteArray());
+                dos.flush();
+                new ReceiveEvents(s, r);
             }
         } catch (Exception e) {
             e.printStackTrace();

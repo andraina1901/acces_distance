@@ -12,6 +12,5 @@ public class MainClient {
         Socket client = c.getSocket();
         ClientScreen cs = new ClientScreen(client);
         cs.screen();
-        // c.close();
     }
 }

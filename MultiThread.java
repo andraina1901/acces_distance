@@ -17,7 +17,6 @@ public class MultiThread extends Thread {
     }
 
     public void run() {
-        // ServerSocket sck = s.getSocket();
         try {
             ServerSocket sck = s.getSocket();
             while (true) {
